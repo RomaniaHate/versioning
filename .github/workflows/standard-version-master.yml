@@ -1,0 +1,25 @@
+name: STANDARD VERSION MASTER
+on:
+  push:
+    branches: [ master ]
+    paths-ignore: 
+      - CHANGELOG.MD
+      - package.json
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependecies
+      run: npm ci
+    - name: Set github name
+      run:  git config --local user.name "RELEASE CI"
+    - name: Set github email
+      run:  git config --local user.email "releaseci@example.com"
+    - name: Release version output
+      run: npm run release -- --dry-run --skip.tag
+    - name: Release version
+      run: npm run release -- --skip.tag
+    - name: Push changes
+      run: git push --follow-tags origin master
+
